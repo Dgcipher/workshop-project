@@ -29,14 +29,15 @@ class UserAPIAuthorization
         {
             return $next($request); // if user is super admin, he can access all pages
         }
-
-        $role = $user->role()->first();
-        if(!$role || $role->privacy != $privacy)
+        $user->load('role');
+        $role = $user->role;
+        $permistion = $role->permissions()->where('privacy', $privacy)->first();
+        if(!$role || !$permistion)
         {
-            return response()->json(['message' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+            return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
-        if (is_null($capability) || in_array($capability,$role->capabilities)) {
+        if (is_null($capability) || in_array($capability,$permistion->capabilities)) {
             return $next($request);
         }
 

@@ -38,7 +38,7 @@ class SearchRolesRequest extends FormRequest
     public function rules()
     {
         return [
-            'select' => 'required|array,in:' . implode(',', $this->fields),
+            'select' => 'required|array|in:' . implode(',', $this->fields),
             'per_page' => 'integer|min:1|max:100',
             'page' => 'integer|min:1',
         ];

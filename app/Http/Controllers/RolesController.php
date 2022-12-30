@@ -13,7 +13,6 @@ use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-
 class RolesController extends Controller
 {
     /**
@@ -32,10 +31,10 @@ class RolesController extends Controller
 
         return response()->json([
             'status' => 'Success',
-            'status_code'=>ResponseAlias::HTTP_CREATED,
+            'status_code'=>ResponseAlias::HTTP_OK,
             'message'=>'',
             'data' => $data
-        ], ResponseAlias::HTTP_CREATED);
+        ], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -195,6 +194,7 @@ class RolesController extends Controller
                 'data' => []
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
+        #$role->permissions()->where('privacy',$request->privacy)->where('capabilities',$request->capabilities)->exists();
         if ($role->permissions()->create($request->only('privacy','capabilities')))
         {
             return response()->json([
