@@ -167,7 +167,6 @@ class UserController extends Controller
      */
     public function delete($id): JsonResponse
     {
-        return 'ok';
         $user = User::find($id);
         if (!$user) {
             return response()->json([
