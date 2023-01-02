@@ -31,8 +31,11 @@ class UserAPIAuthorization
         }
         $user->load('role');
         $role = $user->role;
+        if(!$role){
+            return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
+        }
         $permistion = $role->permissions()->where('privacy', $privacy)->first();
-        if(!$role || !$permistion)
+        if(!$permistion)
         {
             return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
