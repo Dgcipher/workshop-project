@@ -33,7 +33,7 @@ class UpdateCapabilitiesRequest extends FormRequest
         $privacy = $this->route('privacy');
         return [
             'capabilities' => 'required|array',
-            'capabilities.*' => 'required|string|exists:'.implode(',', PrivacyEnums::getCapabilities($privacy)),
+            'capabilities.*' => 'required|string|in:'.implode(',', PrivacyEnums::getCapabilities($privacy)),
         ];
     }
 
