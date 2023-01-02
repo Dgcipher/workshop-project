@@ -17,9 +17,10 @@ class UserAPIAuthorization
      * @param null $capability
      * @return mixed
      */
-    public function handle(Request $request, \Closure $next , $privacy , $capability = null)
+    public function handle(Request $request, \Closure $next , $privacy , $capability =null )
 
     {
+
         $user = Auth::guard('user_api')->user();
         if(!$user)
         {
@@ -31,15 +32,20 @@ class UserAPIAuthorization
         }
         $user->load('role');
         $role = $user->role;
-        $permistion = $role->permissions()->where('privacy', $privacy)->first();
-        if(!$role || !$permistion)
+        if(!$role)
         {
             return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+        $permistion = $role->permissions()->where('privacy', $privacy)->first();
+        if(!$permistion)
+        {
+            return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
 
-        if (is_null($capability) || in_array($capability,$permistion->capabilities)) {
+        }
+        if (is_null($capability) || in_array($capability,(array)$permistion->capabilities)) {
             return $next($request);
         }
+
 
         return response()->json(['message' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
 
