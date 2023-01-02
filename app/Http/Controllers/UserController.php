@@ -6,6 +6,7 @@ use App\Http\Requests\CreateUsersRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SearchUsersRequest;
 use App\Http\Requests\UpdateUsersRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -207,6 +208,16 @@ class UserController extends Controller
                 'status' => 'Error',
                 'status_code'=>ResponseAlias::HTTP_NOT_FOUND,
                 'message' => 'User not found',
+                'data'=>[]
+            ], ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        $role = Role::find($role_id);
+        if (!$role) {
+            return response()->json([
+                'status' => 'Error',
+                'status_code'=>ResponseAlias::HTTP_NOT_FOUND,
+                'message' => 'Role not found',
                 'data'=>[]
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
