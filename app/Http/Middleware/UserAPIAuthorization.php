@@ -31,7 +31,9 @@ class UserAPIAuthorization
         }
         $user->load('role');
         $role = $user->role;
-        $permistion = $role->permissions()->where('privacy', $privacy)->first();
+         $permistion = $role->permissions()->where('privacy', $privacy)->first();
+        // $permistion = isset($role) ? $role->permissions()->where('privacy', $privacy)->first() : null;
+
         if(!$role || !$permistion)
         {
             return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
