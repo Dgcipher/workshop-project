@@ -6,7 +6,7 @@ class PrivacyEnums
 {
     const USERS = 'USERS';
     const ROLES  = 'ROLES';
-
+    const ARTICLE = 'ARTICLE';
     public static function listConstants(): array
     {
         $sdClass = new \ReflectionClass(__CLASS__);
@@ -36,6 +36,13 @@ class PrivacyEnums
                 'assign_capability',
                 'unassign_capability',
             ],
+            self::ARTICLE =>[
+                'create',
+                'read',
+                'update',
+                'delete',
+            ]
+            ,
             default => [],
         };
 
