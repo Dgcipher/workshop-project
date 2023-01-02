@@ -185,6 +185,8 @@ class RolesController extends Controller
     }
     public function assignPermissions(AssignPermissionsRequest $request,$id)
     {
+
+        
         $role = Role::find($id);
         if (!$role) {
             return response()->json([
@@ -194,7 +196,7 @@ class RolesController extends Controller
                 'data' => []
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
-        #$role->permissions()->where('privacy',$request->privacy)->where('capabilities',$request->capabilities)->exists();
+        $role->permissions()->where('privacy',$request->privacy)->where('capabilities',$request->capabilities)->exists();
         if ($role->permissions()->create($request->only('privacy','capabilities')))
         {
             return response()->json([
@@ -242,8 +244,9 @@ class RolesController extends Controller
             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-    }
-    public function updateCapabilities(UpdateCapabilitiesRequest $request,$id,$privacy): JsonResponse
+     }
+    //  UpdateCapabilities
+    public function updateCapabilities(Request $request,$id,$privacy): JsonResponse
     {
         $capabilities = $request->input('capabilities');
 
@@ -278,7 +281,7 @@ class RolesController extends Controller
         }
 
     }
-
+    // UpdateCapabilities
     public function assignCapabilities(UpdateCapabilitiesRequest $request,$id,$privacy)
     {
         $capabilities = $request->input('capabilities');
