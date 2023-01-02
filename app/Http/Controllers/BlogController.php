@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Traits\apiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
+    use apiResponse;
     public function index()
 {
     $blogs = Blog::all();
-    return response()->json($blogs);
+    return $this->ApiResponse($blogs,'found',200);
 }
 
 public function show($id)
 {
-    $blog = Blog::findOrFail($id);
+    $blog = Blog::find($id);
+    if(is_null($blog))
+    {
+         return response()->json(['msg'=>"not found"],200);
+    }
     return response()->json($blog);
 }
 
@@ -33,24 +39,47 @@ public function store(Request $request)
         return response()->json(['errors'=>$validator->errors()],400,);
     }
     $blog = Blog::create($request->all());
-    return response()->json($blog, 201);
+    return $this->ApiResponse($blog,'created successfuly',200);
 }
 
 public function update(Request $request, $id)
+{  $validator=Validator::make($request->all(),[
+    'title' => 'required|max:255',
+    'body' => 'required',
+]);
+if($validator->fails())
 {
-    $validatedData = $request->validate([
-        'title' => 'required|max:255',
-        'body' => 'required',
-    ]);
-    $blog = Blog::findOrFail($id);
-    $blog->update($validatedData);
-    return response()->json($blog, 200);
+    return response()->json(['errors'=>$validator->errors()],400,);
 }
+
+$blog = Blog::find($id);
+if(is_null($blog))
+{
+     return response()->json(['msg'=>"not found"],200);
+}
+
+$blog->update($request->all());
+
+
+return $this->ApiResponse($blog,'updated successfuly',200);
+
+}
+
 
 public function destroy($id)
 {
-    $blog = Blog::findOrFail($id);
-    $blog->delete();
-    return response()->json(null, 204);
+
+    $blog = Blog::find($id);
+    if(is_null($blog))
+    {
+         return response()->json(['msg'=>"not found"],200);
+    }
+
+   else{ $blog->delete();
+
+
+    return $this->ApiResponse($blog,'deleted successfuly',200);
+
+}
 }
 }

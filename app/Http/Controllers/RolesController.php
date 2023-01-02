@@ -186,7 +186,7 @@ class RolesController extends Controller
     public function assignPermissions(AssignPermissionsRequest $request,$id)
     {
 
-        
+
         $role = Role::find($id);
         if (!$role) {
             return response()->json([
@@ -246,7 +246,7 @@ class RolesController extends Controller
 
      }
     //  UpdateCapabilities
-    public function updateCapabilities(Request $request,$id,$privacy): JsonResponse
+    public function updateCapabilities(UpdateCapabilitiesRequest $request,$id,$privacy): JsonResponse
     {
         $capabilities = $request->input('capabilities');
 

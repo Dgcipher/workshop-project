@@ -60,12 +60,20 @@ Route::middleware('UserApiAuth')->group(function () {
         });
     });
 
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index']);
+        Route::get('/{id}', [BlogController::class, 'show']);
+        Route::post('', [BlogController::class, 'store'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',create');
+        Route::put('/{id}', [BlogController::class, 'update']);
+        Route::delete('/{id}', [BlogController::class, 'destroy'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',delete');
+    });
+
 
     Route::get('blogs', [BlogController::class, 'index']);
     Route::get('blogs/{id}', [BlogController::class, 'show']);
-    Route::post('blogs', [BlogController::class, 'store']);
+    Route::post('blogs', [BlogController::class, 'store'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',create');
     Route::put('blogs/{id}', [BlogController::class, 'update']);
-    Route::delete('blogs/{id}', [BlogController::class, 'destroy']);
+    Route::delete('blogs/{id}', [BlogController::class, 'destroy'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',delete');
 
 
 
