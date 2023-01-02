@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\PrivacyEnums;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,7 +38,7 @@ class UnassignPermissionsRequest extends FormRequest
                 'string',
                 'in:' . implode(',', PrivacyEnums::listConstants()),
                 function ($attribute, $value, $fail) use ($id) {
-                    if (!Role::where('id',$id)->where('privacy',$value)->exists()) {
+                    if (!Permission::where('role_id',$id)->where('privacy',$value)->exists()) {
                         $fail('The selected privacy is not assigned to the role.');
                     }
                 },

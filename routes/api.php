@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PrivacyEnums;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -58,4 +59,18 @@ Route::middleware('UserApiAuth')->group(function () {
             });
         });
     });
+
+    Route::prefix('blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index']);
+        Route::get('/{id}', [BlogController::class, 'show']);
+        Route::post('', [BlogController::class, 'store'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',create');
+        Route::put('/{id}', [BlogController::class, 'update']);
+        Route::delete('/{id}', [BlogController::class, 'destroy'])->middleware('UserAPIAuthorization:'.PrivacyEnums::BLOG.',delete');
+    });
+
+
+
+
+
 });
+
