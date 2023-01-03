@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PrivacyEnums;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -22,16 +23,16 @@ Route::post('/login', [UserController::class, 'login']);
 Route::middleware('UserApiAuth')->group(function () {
 
     Route::prefix('user-management')->group(function () {
-        Route::prefix('/users')->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS)->group(function () {
-            Route::get('/', [UserController::class, 'search'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
-            Route::post('/', [UserController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',create');
+        Route::prefix('/users')->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS)->group(function () {
+            Route::get('/', [UserController::class, 'search'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',read');
+            Route::post('/', [UserController::class, 'create'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',create');
             Route::prefix('/{id}')->group(function () {
-                Route::get('/', [UserController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
-                Route::put('/', [UserController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',update');
-                Route::delete('/', [UserController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',delete');
+                Route::get('/', [UserController::class, 'read'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',read');
+                Route::put('/', [UserController::class, 'update'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',update');
+                Route::delete('/', [UserController::class, 'delete'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',delete');
                 Route::prefix('/roles/{role_id}')->group(function () {
-                    Route::post('/', [UserController::class, 'assignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',assign_role');
-                    Route::delete('/', [UserController::class, 'unassignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',unassign_role');
+                    Route::post('/', [UserController::class, 'assignRole'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',assign_role');
+                    Route::delete('/', [UserController::class, 'unassignRole'])->middleware('UserAPIAuthorization:' . PrivacyEnums::USERS . ',unassign_role');
                 });
             });
         });
@@ -39,22 +40,34 @@ Route::middleware('UserApiAuth')->group(function () {
 
     Route::prefix('role-management')->group(function () {
         Route::prefix('/roles')->group(function () {
-            Route::get('/', [RolesController::class, 'search'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',read');
-            Route::post('/', [RolesController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',create');
+            Route::get('/', [RolesController::class, 'search'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',read');
+            Route::post('/', [RolesController::class, 'create'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',create');
             Route::prefix('/{id}')->group(function () {
-                Route::get('/', [RolesController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',read');
-                Route::put('/', [RolesController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',update');
-                Route::delete('/', [RolesController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',delete');
+                Route::get('/', [RolesController::class, 'read'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',read');
+                Route::put('/', [RolesController::class, 'update'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',update');
+                Route::delete('/', [RolesController::class, 'delete'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',delete');
                 Route::prefix('/permissions')->group(function () {
-                    Route::get('/', [RolesController::class, 'getPermissions'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',get_permission');
-                    Route::post('/assign', [RolesController::class, 'assignPermissions'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',assign_permission');
-                    Route::post('/unassign', [RolesController::class, 'unassignPermissions'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',unassign_permission');
+                    Route::get('/', [RolesController::class, 'getPermissions'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',get_permission');
+                    Route::post('/assign', [RolesController::class, 'assignPermissions'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',assign_permission');
+                    Route::post('/unassign', [RolesController::class, 'unassignPermissions'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',unassign_permission');
                     Route::prefix('/capabilities')->group(function () {
-                        Route::put('/{privacy}',[RolesController::class,'updateCapabilities'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',update_capability');
-                        Route::post('/{privacy}',[RolesController::class,'assignCapabilities'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',assign_capability');
-                        Route::delete('/{privacy}',[RolesController::class,'unassignCapabilities'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',unassign_capability');
+                        Route::put('/{privacy}', [RolesController::class, 'updateCapabilities'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',update_capability');
+                        Route::post('/{privacy}', [RolesController::class, 'assignCapabilities'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',assign_capability');
+                        Route::delete('/{privacy}', [RolesController::class, 'unassignCapabilities'])->middleware('UserAPIAuthorization:' . PrivacyEnums::ROLES . ',unassign_capability');
                     });
                 });
+            });
+        });
+    });
+
+    Route::prefix('post-management')->group(function () {
+        Route::prefix('/posts')->group(function () {
+            Route::get('/', [PostController::class, 'search'])->middleware('UserAPIAuthorization:' . PrivacyEnums::POSTS);
+            Route::post('/', [PostController::class, 'create'])->middleware('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',create');
+            Route::prefix('/{postId}')->group(function () {
+                Route::get('/', [PostController::class, 'read'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',read'));
+                Route::put('/', [PostController::class, 'update'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',update'));
+                Route::delete('/', [PostController::class, 'delete'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',delete'));
             });
         });
     });
