@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\PrivacyEnums;
-use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -37,13 +37,13 @@ class AssignPermissionsRequest extends FormRequest
                 'string',
                 'in:' . implode(',', PrivacyEnums::listConstants()),
                 function ($attribute, $value, $fail) use ($id) {
-                    if (Permission::where('role_id',$id)->where('privacy',$value)->exists()) {
+                    if (Role::where('id',$id)->where('privacy',$value)->exists()) {
                         $fail('The privacy is already assigned.');
                     }
                 },
             ],
             'capabilities' => 'required|array',
-            'capabilities.*' => 'required|string|in:'.implode(',', PrivacyEnums::getCapabilities($this->privacy)),
+            'capabilities.*' => 'required|string|exists:'.implode(',', PrivacyEnums::getCapabilities($this->privacy)),
         ];
     }
 

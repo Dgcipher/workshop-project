@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUsersRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\SearchUsersRequest;
-use App\Http\Requests\UpdateUsersRequest;
+use App\Http\Requests\SearchPostsRequest;
+use App\Http\Requests\UpdatePostsRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,10 +43,10 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param SearchUsersRequest $request
+     * @param SearchPostsRequest $request
      * @return JsonResponse
      */
-    public function search(SearchUsersRequest $request): JsonResponse
+    public function search(SearchPostsRequest $request): JsonResponse
     {
         $select = $request->input('select', ['*']);
         $per_page = $request->input('per_page', 10);
@@ -118,11 +118,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateUsersRequest $request
+     * @param UpdatePostsRequest $request
      * @param $id
      * @return JsonResponse
      */
-    public function update(UpdateUsersRequest $request, $id): JsonResponse
+    public function update(UpdatePostsRequest $request, $id): JsonResponse
     {
         $inputs = $request->all();
         if ($request->has('password')) {
