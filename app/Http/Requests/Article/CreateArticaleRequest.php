@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\Article;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CreateArticaleRequest extends FormRequest
 {
@@ -28,5 +32,15 @@ class CreateArticaleRequest extends FormRequest
              'description'=>'required|min:10',
              'image'=>'sometimes|mimes:jpg,jpeg,png|max:255|image'
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $response = new JsonResponse([
+            'data' => [],
+            'message' => 'Validation Error',
+            'errors' => $validator->messages()->all(),
+        ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+
+        throw new ValidationException($validator, $response);
     }
 }
