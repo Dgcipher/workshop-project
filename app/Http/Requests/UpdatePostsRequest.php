@@ -32,6 +32,7 @@ class UpdatePostsRequest extends FormRequest
         return [
             'title' => 'required|string|regex:/^[a-zA-Z]+$/|max:255',
             'body' => 'required|string',
+            'path'=>'required|image|mimes:png,jpg,svg,gif|max:2048'
         ];
     }
 

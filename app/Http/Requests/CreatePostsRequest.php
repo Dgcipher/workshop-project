@@ -31,6 +31,7 @@ class CreatePostsRequest extends FormRequest
         return [
             'title' => 'required|string',
             'body' => 'required|string',
+            'path'=>'required|image|mimes:png,jpg,svg,gif|max:2048'
         ];
     }
 

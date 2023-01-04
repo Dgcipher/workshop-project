@@ -15,7 +15,7 @@ class SearchPostsRequest extends FormRequest
     public function __construct()
     {
         parent::__construct();
-        $this->fields = ['title','body'];
+        $this->fields = ['id','title','body','path'];
 
 
     }

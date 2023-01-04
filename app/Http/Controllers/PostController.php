@@ -8,81 +8,16 @@ use App\Http\Requests\CreatePostsRequest;
 use App\Http\Requests\SearchPostsRequest;
 use App\Http\Requests\UpdatePostsRequest;
 use App\Models\Post;
+use App\Traits\UploadImageTrait;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-//use http\Env\Request;
+
 
 class PostController extends Controller
 {
 
-//    public function index()
-//    {
-//        $posts = Post::get();
-//        return view('posts.index', compact('posts'));
-//    }
-//
-//
-//    public function create()
-//    {
-//        return view('posts.create');
-//    }
-//
-//
-//    public function store(SearchPostsRequest $request)
-//    {
-//        try {
-//            Post::create($request->all());
-//            return redirect()->back()->with('success', 'Data saved successfully');
-//        } catch (\Exception $e) {
-//            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-//        }
-//    }
-//
-//
-//    public function show(Post $post)
-//    {
-//        //
-//    }
-//
-//
-//    public function edit($id)
-//    {
-//        $post = Post::findorFail($id);
-//        return view('posts.edit', compact('post'));
-//    }
-//
-//
-//    public function update(SearchPostsRequest $request, $id)
-//    {
-//
-//        try {
-//            $post = Post::findorFail($id);
-//
-//            $post->update($request->all());
-//
-//            return redirect()->back()->with('edit', 'Data Updated successfully');
-//
-//        } catch (\Exception $e) {
-//
-//            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-//        }
-//
-//    }
-//
-//
-//    public function destroy($id)
-//    {
-//        try {
-//
-//            Post::destroy($id);
-//            return redirect()->back()->with('delete', 'Data has been deleted successfully');
-//
-//        } catch (\Exception $e) {
-//
-//            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-//        }
-//    }
+use UploadImageTrait;
 
 
     /**
@@ -115,9 +50,13 @@ class PostController extends Controller
      */
     public function create(CreatePostsRequest $request): JsonResponse
     {
-        $inputs = $request->all();
-
-        if (Post::create($inputs)) {
+        $path= $this->uploadeimage($request,'users');
+        $possts=  Post::create([
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'path'=>$path,
+        ]);
+        if ($possts) {
             $status = 'Success';
             $status_code = ResponseAlias::HTTP_CREATED;
             $message = 'Post created successfully';
@@ -168,9 +107,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostsRequest $request, $id): JsonResponse
     {
-        $inputs = $request->all();
-
-        $user = Post::find($id);
+        $user = Post::findorfail($id);
         if (!$user) {
             return response()->json([
                 'status' => 'Error',
@@ -179,8 +116,13 @@ class PostController extends Controller
                 'data'=>[]
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
-
-        if ($user->update($inputs)) {
+        $path= $this->uploadeimage($request,'users');
+        $possts=$user->update([
+            'title'=>$request->title,
+            'body'=>$request->body,
+            'path'=>$path,
+        ]);
+        if ($possts) {
             $status = 'Success';
             $status_code = ResponseAlias::HTTP_OK;
             $message = 'Post updated successfully';

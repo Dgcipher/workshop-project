@@ -66,7 +66,7 @@ Route::middleware('UserApiAuth')->group(function () {
             Route::post('/', [PostController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',create');
             Route::prefix('/{id}')->group(function () {
                 Route::get('/', [PostController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',read');
-                Route::put('/', [PostController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',update');
+                Route::post('/', [PostController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',update');
                 Route::delete('/', [PostController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',delete');
             });
         });
