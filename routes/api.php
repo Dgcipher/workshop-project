@@ -3,7 +3,6 @@
 use App\Enums\PrivacyEnums;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
