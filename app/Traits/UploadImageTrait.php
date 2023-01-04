@@ -11,7 +11,12 @@ trait UploadImageTrait
         //        hashName(),storeAs,move
 
         $image =$request->file('path');
-        $path =$image->storeAs($foldername,$image->getClientOriginalName(),'public');
+        $path =$image->move($foldername,$image->getClientOriginalName(),'public');
+        return $path;
+    }
+    public function deleteimage(Request $request,$foldername){
+        $image =$request->file('path');
+        $path =$image->deleteDirectory('public');
         return $path;
     }
 }

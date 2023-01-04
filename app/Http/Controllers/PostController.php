@@ -10,8 +10,10 @@ use App\Http\Requests\UpdatePostsRequest;
 use App\Models\Post;
 use App\Traits\UploadImageTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-
+use Illuminate\Support\Facades\File;
 
 
 class PostController extends Controller
@@ -107,7 +109,7 @@ use UploadImageTrait;
      */
     public function update(UpdatePostsRequest $request, $id): JsonResponse
     {
-        $user = Post::findorfail($id);
+        $user = Post::where('id',$id)->first();
         if (!$user) {
             return response()->json([
                 'status' => 'Error',
@@ -115,6 +117,9 @@ use UploadImageTrait;
                 'message' => 'Post not found',
                 'data'=>[]
             ], ResponseAlias::HTTP_NOT_FOUND);
+        }
+        if (!empty($user->id)) {
+            File::delete($user->path);
         }
         $path= $this->uploadeimage($request,'users');
         $possts=$user->update([
@@ -149,7 +154,7 @@ use UploadImageTrait;
      */
     public function delete($id): JsonResponse
     {
-        $user = Post::find($id);
+        $user = Post::where('id',$id)->first();
         if (!$user) {
             return response()->json([
                 'status' => 'Error',
@@ -158,8 +163,10 @@ use UploadImageTrait;
                 'data'=>[]
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
-
-        if ($user->delete()) {
+        if (!empty($user->id)) {
+            File::delete($user->path);
+        }
+        if ($user->forcedelete()) {
             $status = 'Success';
             $status_code = ResponseAlias::HTTP_OK;
             $message = 'Post deleted successfully';
