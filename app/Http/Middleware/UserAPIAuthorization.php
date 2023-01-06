@@ -31,13 +31,17 @@ class UserAPIAuthorization
         }
         $user->load('role');
         $role = $user->role;
-        $permistion = $role->permissions()->where('privacy', $privacy)->first();
-        if(!$role || !$permistion)
+        if(!$role)
         {
-            return response()->json(['message' => 'access denined'], ResponseAlias::HTTP_UNAUTHORIZED);
+            return response()->json(['message' => 'access denied'], ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+        $permission = $role->permissions()->where('privacy', $privacy)->first();
+        if(!$permission)
+        {
+            return response()->json(['message' => 'access denied'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
-        if (is_null($capability) || in_array($capability,$permistion->capabilities)) {
+        if (is_null($capability) || in_array($capability,$permission->capabilities)) {
             return $next($request);
         }
 
