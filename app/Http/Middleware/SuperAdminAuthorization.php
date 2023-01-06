@@ -25,6 +25,7 @@ class SuperAdminAuthorization
             return $next($request);
         }
         $user = User::find($request->route('id'));
+        if (!$user) return response()->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         if ($user->is_super_admin) {
             return response()->json(['message' => 'You are not authorized to do this action'], Response::HTTP_UNAUTHORIZED);
         }
