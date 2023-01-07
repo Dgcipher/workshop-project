@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+/*eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzg5NDM0YzU0NDBjZjBiYjI4ZGYwNTQ2ZjNhMjdkN2RiOGQ4ZGY1NWE5MTdiZDQ5MWE2ODdhNjliZjc4OTI0MjEyN2FkMGFmNzdlNmY0MmEiLCJpYXQiOjE2NzMwOTY1MDQuNTQ1NTQ0LCJuYmYiOjE2NzMwOTY1MDQuNTQ1NTQ2LCJleHAiOjE2NzMxMDAxMDUuNTMxODEsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.O1yrWi0pWyHNkHFJqnCluzmzH40v-F_eveIU34pQ5Cjsr2hFR8ZEGY9Ts4f0Ezt3uNTh0REL268KP6JUDNlWli6T7ehuIdh1sQ38thuEYyuGaq5FHN60aPySGCmeZa1X2BIHa6ZTQHCbgFNdxyq0LxFpm_ev9FGiQxjySCTh5Uwofn5ZHd-vqarmcrgUQ6x5xr8m2HKn_bE3B10hE45I93QkUHPtuGsjw5SqFpnTPaey-8kzNU_lXwpoh6pPAsex3-shw7NK2zSQhXA_bB3n-f-bkwjcwSrj6po18Xi6eVHVYx2dHUZTDa6njpZJeo1MpWk2axq0DEOxaB4GdgMY4oD4JLGoahPc6AFyFQOmbKUBURGucceSO5tT3KH-Pl7Hh3t1QbJ5uMwMm1lMDFt14pKrwpnXOzJ3ZL8g3HS_g37cKGkWvBbSMFwAAuGuybEd-QzYPu0cpOKWwiQgCal-6AoWwa0XLCXeS8vCdWiwNsPfU-5AijzQfbo6oONikbs0EzyFnuIC36XEI9a3tmctBvyg-Z0pwld_h6P_H7Q2OQ12JlEe7HMP98d_BXVfjLF_H8FbZWWeuDkvdmimI9PPipWgfz2DqTlS2c6lG0oxjHPY-GN80SrwXECW65kres9c0H8HSKPWCC3YpImWAQznumNInH-_iLSUKvd6yKHeeNs*/
 Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware('UserApiAuth')->group(function () {
@@ -56,6 +56,13 @@ Route::middleware('UserApiAuth')->group(function () {
                     });
                 });
             });
+        });
+    });
+    Route::prefix('post-management')->group(function (){
+        Route::prefix('/posts')->group(function (){
+            Route::get('/',[\App\Http\Controllers\PostController::class, 'index'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',read');
+            Route::post('/',[\App\Http\Controllers\PostController::class, 'store'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',create');
+
         });
     });
 });
