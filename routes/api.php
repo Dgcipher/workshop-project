@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PrivacyEnums;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -58,4 +59,17 @@ Route::middleware('UserApiAuth')->group(function () {
             });
         });
     });
+
+    Route::prefix('posts-management')->group(function () {
+        Route::prefix('/posts')->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS)->group(function () {
+            Route::get('/', [PostController::class, 'search'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',read');
+            Route::post('/', [PostController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',create');
+            Route::prefix('/{id}')->group(function () {
+                Route::get('/', [PostController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',read');
+                Route::post('/', [PostController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',update');
+                Route::delete('/', [PostController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',delete');
+            });
+        });
+    });
+
 });

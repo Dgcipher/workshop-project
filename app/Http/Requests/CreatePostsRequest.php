@@ -2,16 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\PrivacyEnums;
-use App\Models\Permission;
-use App\Models\Role;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class AssignPermissionsRequest extends FormRequest
+class CreatePostsRequest extends FormRequest
 {
 
     /**
@@ -31,20 +28,10 @@ class AssignPermissionsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('id');
         return [
-            'privacy' => [
-                'required',
-                'string',
-                'in:' . implode(',', PrivacyEnums::listConstants()),
-                function ($attribute, $value, $fail) use ($id) {
-                    if (Permission::where('role_id',$id)->where('privacy',$value)->exists()) {
-                        $fail('The privacy is already assigned.');
-                    }
-                },
-            ],
-            'capabilities' => 'required|array',
-            'capabilities.*' => 'required|string|in:'.implode(',', PrivacyEnums::getCapabilities($this->privacy)),
+            'title' => 'required|string',
+            'body' => 'required|string',
+            'path'=>'required|image|mimes:png,jpg,svg,gif|max:2048'
         ];
     }
 

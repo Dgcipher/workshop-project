@@ -194,7 +194,7 @@ class RolesController extends Controller
                 'data' => []
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
-        #$role->permissions()->where('privacy',$request->privacy)->where('capabilities',$request->capabilities)->exists();
+//        $role->permissions()->where('privacy',$request->privacy)->where('capabilities',$request->capabilities)->exists();
         if ($role->permissions()->create($request->only('privacy','capabilities')))
         {
             return response()->json([
@@ -333,24 +333,28 @@ class RolesController extends Controller
 
         $capabilities = array_diff($permissions->capabilities,$capabilities);
 
-        if ($permissions->update(['capabilities'=>$capabilities]))
-        {
-            return response()->json([
-                'status' => 'Success',
-                'status_code'=>ResponseAlias::HTTP_OK,
-                'message' => 'Capabilities updated successfully',
-                'data' => []
-            ], ResponseAlias::HTTP_OK);
 
-        }else{
+         if ($permissions->update(['capabilities'=>$capabilities]))
+         {
+             return response()->json([
+                 'status' => 'Success',
+                 'status_code'=>ResponseAlias::HTTP_OK,
+                 'message' => 'Capabilities updated successfully',
+                 'data' => []
+             ], ResponseAlias::HTTP_OK);
 
-            return response()->json([
-                'status' => 'Error',
-                'status_code'=>ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Capabilities not updated',
-                'data' => []
-            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
+         }else{
+
+             return response()->json([
+                 'status' => 'Error',
+                 'status_code'=>ResponseAlias::HTTP_INTERNAL_SERVER_ERROR,
+                 'message' => 'Capabilities not updated',
+                 'data' => []
+             ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+         }
+
+
+
     }
 
 }
