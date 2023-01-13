@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\superAdmin;
+use App\Http\Middleware\IsSuperAdmin;
 use App\Http\Middleware\UserApiAuth;
 use App\Http\Middleware\UserAPIAuthorization;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'UserApiAuth' => UserApiAuth::class,
         'UserAPIAuthorization' => UserAPIAuthorization::class,
-        'superAdmin' => superAdmin::class,
+        'IsSuperAdmin' => IsSuperAdmin::class,
     ];
 }

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class superAdmin
+class IsSuperAdmin
 {
     /**
      * Handle an incoming request.
@@ -19,9 +19,8 @@ class superAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::guard('user_api')->user()->is_super_admin) {
-            return $next($request);
-
+        if(! Auth::guard('user_api')->user()->is_super_admin) {
+            return response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
         $user = User::find($request->id);
         if($user->is_super_admin) {
