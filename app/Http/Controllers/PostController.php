@@ -17,21 +17,19 @@ class PostController extends Controller
             'status_code' => ResponseAlias::HTTP_OK,
             'message' => '',
             'data' => $posts,
-        ], ResponseAlias::HTTP_CREATED);
+        ], ResponseAlias::HTTP_OK);
     }
 
     public function create(CreatePostRequest $request)
     {
-        // $inputs = $request->all();
-        $ImageName = time() . '.' .$request->title . '.'. $request->image->extension();
-        $request->image->move(public_path('images'), $ImageName);
-        //$path = "public/images/$ImageName";
-
+        $imageName = time() . '.' .$request->title . '.'. $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+        
         if (Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'category_id' => $request->category_id,
-            'image_path' => $ImageName
+            'image_path' => $imageName
         ])) {
             $status = 'Success';
             $status_code = ResponseAlias::HTTP_CREATED;
@@ -73,9 +71,9 @@ class PostController extends Controller
     {
         $inputs = $request->all();
         $post = Post::find($id);
-        $ImageName = time() . '.' .$request->title . '.'. $request->image->extension();
-        $request->image->move(public_path('images'), $ImageName);
-        $post->image_path = $ImageName;
+        $imageName = time() . '.' .$request->title . '.'. $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+        $post->image_path = $imageName;
 
         if (!$post) {
             return response()->json([
