@@ -64,7 +64,7 @@ Route::middleware('UserApiAuth')->group(function () {
         Route::prefix('/posts')->group(function () {
             Route::get('/', [PostController::class, 'search'])->middleware('UserAPIAuthorization:' . PrivacyEnums::POSTS);
             Route::post('/', [PostController::class, 'create'])->middleware('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',create');
-            Route::prefix('/{postId}')->group(function () {
+            Route::prefix('/{id}')->group(function () {
                 Route::get('/', [PostController::class, 'read'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',read'));
                 Route::put('/', [PostController::class, 'update'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',update'));
                 Route::delete('/', [PostController::class, 'delete'])->middleware(('UserAPIAuthorization:' . PrivacyEnums::POSTS . ',delete'));

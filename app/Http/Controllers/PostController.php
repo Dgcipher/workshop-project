@@ -14,8 +14,6 @@ class PostController extends Controller
 {
     use UploadTrait;
     private $postModel;
-
-
     public function __construct(Post $post)
     {
         $this->postModel = $post;
@@ -107,7 +105,7 @@ class PostController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = $image->hashName();
-            $this->uploadFile($image, 'posts/images/', $imageName, public_path('posts/images/' . $post->image));
+            $this->uploadFile($image, 'posts/images/', $imageName, 'posts/images/' . $post->image);
         }
         $post->update([
             'title' => $request->title,
@@ -133,13 +131,13 @@ class PostController extends Controller
         $post = $this->postModel::findOrFail($id);
         $post->delete();
         if ($post->image) {
-            $this->deleteFile(public_path('posts/images/' . $post->image));
+            $this->deleteFile('posts/images/' .$post->image);
+            return response()->json([
+                'status' => 'Success',
+                'status_code' => Response::HTTP_OK,
+                'message' => 'Post Deleted Successfully',
+                'data' => []
+            ], Response::HTTP_OK);
         }
-        return response()->json([
-            'status' => 'Success',
-            'status_code' => Response::HTTP_OK,
-            'message' => 'Post Deleted Successfully',
-            'data' => []
-        ], Response::HTTP_OK);
     }
 }

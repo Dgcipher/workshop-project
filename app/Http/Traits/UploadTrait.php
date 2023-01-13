@@ -2,27 +2,23 @@
 
 namespace App\Http\Traits;
 
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 trait UploadTrait
 {
 
-    public function uploadFile($file, $path, $fileName,  $oldFile = null)
+    public function uploadFile($file, $path, $fileName,  $oldFile = "")
     {
-        $file->move($path, $fileName, 'public');
+        $file->storeAs($path, $fileName, 'public');
 
-        if ($oldFile) {
-
-            File::delete($oldFile);
-        }
+        $this->deleteFile($oldFile);
     }
 
     public function deleteFile($path)
     {
+        if (Storage::url($path)) {
 
-
-        if (File::exists($path)) {
-            File::delete($path);
+            Storage::disk('public')->delete($path);
         }
     }
 }

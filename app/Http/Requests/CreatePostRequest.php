@@ -36,29 +36,17 @@ class CreatePostRequest extends FormRequest
         ];
     }
 
-      /**
+    /**
      * @throws ValidationException
      */
 
     protected function failedValidation(Validator $validator)
     {
-        $errors = (new ValidationException($validator))->errors();
-
-        if (!empty($errors)) {
-            $errorMessages = [];
-            foreach($errors as $field => $message) {
-                $errorMessages[] = [
-                    $field => $message[0]
-                ];
-            }
-            throw new HttpResponseException(
-                response()->json([
-                    'status' => 'Validation Error',
-                    'message' => $errorMessages
-
-                ], JsonResponse::HTTP_BAD_REQUEST)
-            );
-        }
-
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 'Validation Error',
+                'message' => $validator->getMessageBag()->toArray(),
+            ], JsonResponse::HTTP_BAD_REQUEST)
+        );
     }
 }

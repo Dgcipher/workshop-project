@@ -28,7 +28,7 @@ class UpdatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|regex:/^[a-zA-Z]+$/|max:255|unique:posts,title,'.$this->id,
+            'title' => 'required|string|regex:/^[a-zA-Z]+$/|max:255|unique:posts,title,' . $this->id,
             'description' => 'required|min:3|max:200',
             'image' => 'sometimes|image|mimes:png,jpg,svg,pneg,gif|max:2048'
 
@@ -37,23 +37,12 @@ class UpdatePostRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        $errors = (new ValidationException($validator))->errors();
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 'Validation Error',
+                'message' => $validator->getMessageBag()->toArray(),
 
-        if (!empty($errors)) {
-            $errorMessages = [];
-            foreach($errors as $field => $message) {
-                $errorMessages[] = [
-                    $field => $message[0]
-                ];
-            }
-            throw new HttpResponseException(
-                response()->json([
-                    'status' => 'Validation Error',
-                    'message' => $errorMessages
-
-                ], JsonResponse::HTTP_BAD_REQUEST)
-            );
-        }
-
+            ], JsonResponse::HTTP_BAD_REQUEST)
+        );
     }
 }

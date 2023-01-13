@@ -16,7 +16,6 @@ class SearchPostRequest extends FormRequest
     {
         parent::__construct();
         $this->fields = ['title'];
-
     }
     /**
      * Determine if the user is authorized to make this request.
@@ -48,22 +47,12 @@ class SearchPostRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        $errors = (new ValidationException($validator))->errors();
+        throw new HttpResponseException(
+            response()->json([
+                'status' => 'Validation Error',
+                'message' => $validator->getMessageBag()->toArray(),
 
-        if (!empty($errors)) {
-            $errorMessages = [];
-            foreach ($errors as $field => $message) {
-                $errorMessages[] = [
-                    $field => $message[0]
-                ];
-            }
-            throw new HttpResponseException(
-                response()->json([
-                    'status' => 'Validation Error',
-                    'message' => $errorMessages
-
-                ], JsonResponse::HTTP_BAD_REQUEST)
-            );
-        }
+            ], JsonResponse::HTTP_BAD_REQUEST)
+        );
     }
 }
