@@ -38,7 +38,7 @@ class CreateCategoryRequest extends FormRequest
             'data' => [],
             'message' => 'Validation Error',
             'errors' => $validator->messages()->all(),
-        ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        ], ResponseAlias::HTTP_BAD_REQUEST);
 
         throw new ValidationException($validator, $response);
     }
