@@ -8,12 +8,7 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+   public function run()
     {
         User::create([
             'name' => 'Admin',
@@ -21,5 +16,6 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
             'is_super_admin' => true,
         ]);
+
     }
 }

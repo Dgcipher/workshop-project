@@ -35,9 +35,7 @@ class CreateUsersRequest extends FormRequest
         ];
     }
 
-    /**
-     * @throws ValidationException
-     */
+
     protected function failedValidation(Validator $validator)
     {
         $response = new JsonResponse([

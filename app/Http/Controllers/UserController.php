@@ -15,11 +15,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
 {
-
-    /**
-     * @param LoginRequest $request
-     * @return JsonResponse
-     */
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
@@ -40,12 +35,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param SearchUsersRequest $request
-     * @return JsonResponse
-     */
     public function search(SearchUsersRequest $request): JsonResponse
     {
         $select = $request->input('select', ['*']);
@@ -62,12 +51,7 @@ class UserController extends Controller
         ], ResponseAlias::HTTP_CREATED);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param CreateUsersRequest $request
-     * @return JsonResponse
-     */
+
     public function create(CreateUsersRequest $request): JsonResponse
     {
         $inputs = $request->all();
@@ -91,12 +75,7 @@ class UserController extends Controller
         ], $status_code);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
+
     public function read($id): JsonResponse
     {
         $user = User::find($id);
@@ -115,13 +94,7 @@ class UserController extends Controller
         ], ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateUsersRequest $request
-     * @param $id
-     * @return JsonResponse
-     */
+
     public function update(UpdateUsersRequest $request, $id): JsonResponse
     {
         $inputs = $request->all();
@@ -158,12 +131,7 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     * @return JsonResponse
-     */
+
     public function delete($id): JsonResponse
     {
         $user = User::find($id);

@@ -1,26 +1,14 @@
 <?php
 
 use App\Enums\PrivacyEnums;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware('UserApiAuth')->group(function () {
-
     Route::prefix('user-management')->group(function () {
         Route::prefix('/users')->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS)->group(function () {
             Route::get('/', [UserController::class, 'search'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
@@ -58,4 +46,18 @@ Route::middleware('UserApiAuth')->group(function () {
             });
         });
     });
+
+// blog routes
+    Route::prefix('/blog')->group(function () {
+        Route::get('/', [BlogController::class, 'index']);
+        Route::get('/{id}', [BlogController::class, 'show']);
+        Route::post('/', [BlogController::class, 'store']);
+        Route::put('/{id}', [BlogController::class, 'update']);
+        Route::delete('/{id}', [BlogController::class, 'destroy']);
+
+    });
+
+
+
+
 });

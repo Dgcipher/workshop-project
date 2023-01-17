@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\AssignPermissionsRequest;
 use App\Http\Requests\CreateRolesRequest;
 use App\Http\Requests\SearchRolesRequest;
@@ -15,12 +14,6 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class RolesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @param SearchRolesRequest $request
-     * @return JsonResponse
-     */
     public function search(SearchRolesRequest $request): JsonResponse
     {
         $select = $request->input('select', ['*']);
@@ -28,7 +21,6 @@ class RolesController extends Controller
         $page = $request->input('page', 1);
 
         $data = Role::simplePaginate($per_page, $select, 'page', $page);
-
         return response()->json([
             'status' => 'Success',
             'status_code'=>ResponseAlias::HTTP_OK,
@@ -37,12 +29,6 @@ class RolesController extends Controller
         ], ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param CreateRolesRequest $request
-     * @return JsonResponse
-     */
     public function create(CreateRolesRequest $request): JsonResponse
     {
         $inputs = $request->all();
@@ -65,12 +51,7 @@ class RolesController extends Controller
         ], $status_code);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
+
     public function read(int $id): JsonResponse
     {
         $data = Role::find($id);
@@ -93,13 +74,7 @@ class RolesController extends Controller
         ], $status_code);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateRolesRequest $request
-     * @param int $id
-     * @return JsonResponse
-     */
+
     public function update(UpdateRolesRequest $request, int $id): JsonResponse
     {
         $inputs = $request->all();
@@ -130,12 +105,7 @@ class RolesController extends Controller
         ], $status_code);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
+
     public function delete(int $id): JsonResponse
     {
         $data = Role::find($id);

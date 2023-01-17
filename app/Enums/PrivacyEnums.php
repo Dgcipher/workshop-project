@@ -5,7 +5,8 @@ namespace App\Enums;
 class PrivacyEnums
 {
     const USERS = 'USERS';
-    const ROLES  = 'ROLES';
+    const ROLES = 'ROLES';
+    const BLOGS = 'BLOGS';
 
     public static function listConstants(): array
     {
@@ -16,7 +17,7 @@ class PrivacyEnums
     public static function getCapabilities(string $privacy): array
     {
         return match ($privacy) {
-            self::USERS => [
+                self::USERS => [
                 'create',
                 'read',
                 'update',
@@ -24,7 +25,7 @@ class PrivacyEnums
                 'assign_role',
                 'unassign_role',
             ],
-            self::ROLES => [
+                self::ROLES => [
                 'create',
                 'read',
                 'update',
@@ -36,8 +37,16 @@ class PrivacyEnums
                 'assign_capability',
                 'unassign_capability',
             ],
+
+                self::BLOGS => [
+                'create',
+                'read',
+                'update',
+                'delete',
+
+            ],
+
             default => [],
         };
-
     }
 }
