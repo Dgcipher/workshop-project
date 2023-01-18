@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class NotSuperAdmin
+class IsSuperAdmin
 {
     /**
      * Handle an incoming request.
@@ -19,18 +19,21 @@ class NotSuperAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        $admin = Auth::guard('user_api')->user();
-        if ($admin->is_super_admin) {
-            return $next($request);
-        }
-        $updateduser = User::find($request->route('id'));
-        if(!$updateduser){
+        $updatedUser = User::find($request->route('id'));
+        if(!$updatedUser)
+        {
             return response()->json(['message' => 'User Not Found'], ResponseAlias::HTTP_NOT_FOUND);
         }
-        if($updateduser->is_super_admin){
-            return response()->json(['message'=>'Can Not Edit Or Delete The Super Admin'],ResponseAlias::HTTP_UNAUTHORIZED);
+
+        if (Auth::guard('user_api')->user()->is_super_admin)
+        {
+            return $next($request);
         }
-        return $next($request);
+        if($updatedUser->is_super_admin)
+        {
+                return response()->json(['message'=>'Can Not Edit Or Delete The Super Admin'],ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+
 
     }
 

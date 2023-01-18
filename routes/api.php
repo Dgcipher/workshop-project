@@ -26,7 +26,7 @@ Route::middleware('UserApiAuth')->group(function () {
             Route::post('/', [UserController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',create');
             Route::prefix('/{id}')->group(function () {
                 Route::get('/', [UserController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
-                Route::middleware('NotSuperAdmin')->group(function (){
+                Route::middleware('IsSuperAdmin')->group(function (){
                     Route::put('/', [UserController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',update');
                     Route::delete('/', [UserController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',delete');
                     Route::prefix('/roles/{role_id}')->group(function () {
