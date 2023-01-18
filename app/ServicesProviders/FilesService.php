@@ -4,7 +4,7 @@ use App\InterfaceProviders\FilesInterface;
 use App\Media\Media;
 use App\Models\Article;
 
-class FilesService {
+class FilesService implements FilesInterface{
 
     public function uploadFile($file) :string
     {
