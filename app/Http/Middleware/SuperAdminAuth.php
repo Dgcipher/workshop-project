@@ -19,12 +19,6 @@ class SuperAdminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-//        $curren_user = Auth::guard('user_api')->user()->is_super_admin;
-//        if($curren_user) {
-//            return $next($request);
-//        }
-
-        // to get user that will be updated or deleted
         $user = User::find($request->id);
         if($user->is_super_admin ) {
             return  $this->responseJson(0,"Access denied");
