@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'UserApiAuth' => UserApiAuth::class,
         'UserAPIAuthorization' => UserAPIAuthorization::class,
+        'user_api'=>\App\Http\Middleware\PreventSuperAdminOperations::class,
     ];
 }

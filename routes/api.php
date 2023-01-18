@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use App\Http\Middleware\PreventSuperAdminOperations;
 use Illuminate\Support\Facades\Route;
 Route::post('/login', [UserController::class, 'login']);
 
@@ -49,11 +50,11 @@ Route::middleware('UserApiAuth')->group(function () {
 
 // blog routes
     Route::prefix('/blog')->group(function () {
-        Route::get('/', [BlogController::class, 'index']);
-        Route::get('/{id}', [BlogController::class, 'show']);
-        Route::post('/', [BlogController::class, 'store']);
-        Route::put('/{id}', [BlogController::class, 'update']);
-        Route::delete('/{id}', [BlogController::class, 'destroy']);
+        Route::get('/', [BlogController::class, 'index'])->middleware('App\Http\Middleware\PreventSuperAdminOperations:'.PrivacyEnums::BLOGS.',read');
+        Route::get('/{id}', [BlogController::class, 'show'])->middleware('App\Http\Middleware\PreventSuperAdminOperations:'.PrivacyEnums::BLOGS.',read');
+        Route::post('/', [BlogController::class, 'store'])->middleware('App\Http\Middleware\PreventSuperAdminOperations:'.PrivacyEnums::BLOGS.',create');
+        Route::put('/{id}', [BlogController::class, 'update'])->middleware('App\Http\Middleware\PreventSuperAdminOperations:'.PrivacyEnums::BLOGS.',update');
+        Route::delete('/{id}', [BlogController::class, 'destroy'])->middleware('App\Http\Middleware\PreventSuperAdminOperations:'.PrivacyEnums::BLOGS.',delete');
 
     });
 
@@ -61,3 +62,4 @@ Route::middleware('UserApiAuth')->group(function () {
 
 
 });
+

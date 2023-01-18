@@ -12,14 +12,6 @@ public function ApiResponse($data=null,$msg=null,$status=null){
 }
 
 
-
-
-
-
-
-
-
-
 }
 
 

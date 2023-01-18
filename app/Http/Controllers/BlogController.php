@@ -40,7 +40,8 @@ class BlogController extends Controller
                 'status_code'=>ResponseAlias::HTTP_CREATED,
                 'message'=>'',
                 'data' => $blog
-            ], ResponseAlias::HTTP_CREATED);        }
+            ], ResponseAlias::HTTP_CREATED);
+            }
             else{
                 return response()->json([
                     'status' => 401,
@@ -55,8 +56,6 @@ class BlogController extends Controller
     {
         //
     }
-
-
     public function update(blogRequest $request, $id):JsonResponse
     {
         $blog = blog::find($id);
@@ -64,8 +63,7 @@ class BlogController extends Controller
             return $this->response()->json([
                 'status' => 401,
                 'status_code'=>ResponseAlias::HTTP_CREATED,
-                'message'=>'Blog NOT FOUND',
-                'data' =>null
+                'message'=>'Blog NOT FOUND'
             ], ResponseAlias::HTTP_CREATED);
 
         }else{
