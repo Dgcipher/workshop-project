@@ -69,6 +69,5 @@ class Kernel extends HttpKernel
         'UserApiAuth' => UserApiAuth::class,
         'UserAPIAuthorization' => UserAPIAuthorization::class,
         'SuperAdminAuth' => SuperAdminAuth::class,
-
     ];
 }
