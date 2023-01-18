@@ -19,7 +19,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(BaseServicesInterface::class,BaseService::class);
         $this->app->bind(ArticleServicesInterface::class,ArticleServices::class);
         $this->app->bind(FilesInterface::class,FilesService::class);
     }
@@ -31,6 +30,6 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 }
