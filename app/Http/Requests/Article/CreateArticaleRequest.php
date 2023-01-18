@@ -30,7 +30,7 @@ class CreateArticaleRequest extends FormRequest
         return [
             'title'=>'required|max:125|min:2'         ,
              'description'=>'required|min:10',
-             'image'=>'sometimes|mimes:jpg,jpeg,png|max:255|image'
+             'image'=>'sometimes|mimes:jpg,jpeg,png|max:255'
         ];
     }
     protected function failedValidation(Validator $validator)

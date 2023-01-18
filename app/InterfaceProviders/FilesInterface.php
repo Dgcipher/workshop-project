@@ -1,6 +1,6 @@
 <?php
 namespace App\InterfaceProviders;
-interface FilesInterFace{
+interface FilesInterface{
     public function uploadFile($file,$dir);
     public function deleteFile($dir);
 }

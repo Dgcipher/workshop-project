@@ -1,16 +1,17 @@
 <?php
 namespace App\ServicesProviders;
-use App\InterfaceProviders\FilesInterFace;
+use App\InterfaceProviders\FilesInterface;
 use App\Media\Media;
 use App\Models\Article;
 
-class FilesService implements FilesInterFace {
+class FilesService {
 
-    public function uploadFile($file, $dir) :string
+    public function uploadFile($file) :string
     {
-        return Media::Upload($dir,$file);
+        return Media::Upload($file);
     }
-    public function deleteFile($dir) :bool {
+    public function deleteFile($dir) :bool
+    {
        return Media::Delete($dir);
     }
 }
