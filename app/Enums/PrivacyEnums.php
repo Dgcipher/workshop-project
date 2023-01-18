@@ -6,6 +6,7 @@ class PrivacyEnums
 {
     const USERS = 'USERS';
     const ROLES  = 'ROLES';
+    Const POSTS = 'POSTS';
 
     public static function listConstants(): array
     {
@@ -35,6 +36,12 @@ class PrivacyEnums
                 'update_capability',
                 'assign_capability',
                 'unassign_capability',
+            ],
+            self::POSTS => [
+                'create',
+                'read',
+                'update',
+                'delete',
             ],
             default => [],
         };

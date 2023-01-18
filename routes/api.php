@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware('UserApiAuth')->group(function () {
@@ -55,6 +54,19 @@ Route::middleware('UserApiAuth')->group(function () {
                         Route::delete('/{privacy}',[RolesController::class,'unassignCapabilities'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',unassign_capability');
                     });
                 });
+            });
+        });
+    });
+
+    Route::prefix('post-management')->group(function (){
+        Route::prefix('/posts')->group(function (){
+            Route::get('/',[\App\Http\Controllers\PostController::class, 'index'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',read');
+            Route::post('/',[\App\Http\Controllers\PostController::class, 'store'])->middleware('UserAPIAuthorization:'.PrivacyEnums::POSTS.',create');
+            Route::prefix('/{id}')->group(function () {
+                Route::get('/', [\App\Http\Controllers\PostController::class, 'show'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',read');
+                Route::put('/', [\App\Http\Controllers\PostController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',update');
+                Route::delete('/',[\App\Http\Controllers\PostController::class, 'destroy'])->middleware('UserAPIAuthorization:'.PrivacyEnums::ROLES.',delete');
+
             });
         });
     });
