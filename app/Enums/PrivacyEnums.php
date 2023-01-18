@@ -7,6 +7,7 @@ class PrivacyEnums
     const USERS = 'USERS';
     const ROLES  = 'ROLES';
     const ARTICLE = 'ARTICLE';
+
     public static function listConstants(): array
     {
         $sdClass = new \ReflectionClass(__CLASS__);
