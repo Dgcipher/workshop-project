@@ -3,7 +3,6 @@
 use App\Enums\PrivacyEnums;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,17 +21,20 @@ Route::post('/login', [UserController::class, 'login']);
 Route::middleware('UserApiAuth')->group(function () {
 
     Route::prefix('user-management')->group(function () {
-        Route::prefix('/users')->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS)->group(function () {
+        Route::prefix('/users')->group(function () {
             Route::get('/', [UserController::class, 'search'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
             Route::post('/', [UserController::class, 'create'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',create');
             Route::prefix('/{id}')->group(function () {
                 Route::get('/', [UserController::class, 'read'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',read');
-                Route::put('/', [UserController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',update');
-                Route::delete('/', [UserController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',delete');
-                Route::prefix('/roles/{role_id}')->group(function () {
-                    Route::post('/', [UserController::class, 'assignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',assign_role');
-                    Route::delete('/', [UserController::class, 'unassignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',unassign_role');
+                Route::middleware('IsSuperAdmin')->group(function (){
+                    Route::put('/', [UserController::class, 'update'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',update');
+                    Route::delete('/', [UserController::class, 'delete'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',delete');
+                    Route::prefix('/roles/{role_id}')->group(function () {
+                        Route::post('/', [UserController::class, 'assignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',assign_role');
+                        Route::delete('/', [UserController::class, 'unassignRole'])->middleware('UserAPIAuthorization:'.PrivacyEnums::USERS.',unassign_role');
+                    });
                 });
+
             });
         });
     });
