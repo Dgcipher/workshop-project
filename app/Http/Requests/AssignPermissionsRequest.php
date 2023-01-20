@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use App\Enums\PrivacyEnums;
 use App\Models\Permission;
+use App\Models\Role;
+
+
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;

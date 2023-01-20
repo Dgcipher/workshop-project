@@ -3,6 +3,7 @@
 use App\Enums\PrivacyEnums;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,20 @@ Route::middleware('UserApiAuth')->group(function () {
                     });
                 });
             });
+        });
+    });
+
+    Route::prefix('article_management')->group(function (){
+        Route::prefix('/articles')->group(function (){
+           Route::controller(ArticleController::class)->group(function (){
+              Route::get('/','search')->middleware('UserAPIAuthorization:'.PrivacyEnums::ARTICLE.',read');
+              Route::post('/','create')->middleware('UserAPIAuthorization:'.PrivacyEnums::ARTICLE.',create');
+              Route::prefix('/{id}')->group(function (){
+                 Route::put('/','update')->middleware('UserAPIAuthorization:'.PrivacyEnums::ARTICLE.',update');;
+                 Route::get('/','edit')->middleware('UserAPIAuthorization:'.PrivacyEnums::ARTICLE.',read');;
+                 Route::delete('/','delete')->middleware('UserAPIAuthorization:'.PrivacyEnums::ARTICLE.',delete');;
+              });
+           });
         });
     });
 });
