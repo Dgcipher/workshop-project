@@ -2,13 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
-
-class UpdatePostRequest extends FormRequest
+class UpdatePostRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,16 +27,5 @@ class UpdatePostRequest extends FormRequest
             'image' => 'sometimes|image|mimes:png,jpg,svg,pneg,gif|max:2048'
 
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'status' => 'Validation Error',
-                'message' => $validator->getMessageBag()->toArray(),
-
-            ], JsonResponse::HTTP_BAD_REQUEST)
-        );
     }
 }

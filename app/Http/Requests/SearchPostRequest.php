@@ -2,13 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
-
-class SearchPostRequest extends FormRequest
+class SearchPostRequest extends ApiRequest
 {
     private array $fields;
 
@@ -40,19 +34,5 @@ class SearchPostRequest extends FormRequest
             'per_page' => 'integer|min:1|max:100',
             'page' => 'integer|min:1',
         ];
-    }
-
-    /**
-     * @throws ValidationException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'status' => 'Validation Error',
-                'message' => $validator->getMessageBag()->toArray(),
-
-            ], JsonResponse::HTTP_BAD_REQUEST)
-        );
     }
 }

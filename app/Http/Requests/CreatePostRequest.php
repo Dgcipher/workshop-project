@@ -2,13 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
-
-class CreatePostRequest extends FormRequest
+class CreatePostRequest extends ApiRequest
 {
 
     /**
@@ -34,19 +28,5 @@ class CreatePostRequest extends FormRequest
             'image' => 'required|image|mimes:png,jpg,svg,pneg,gif|max:2048'
 
         ];
-    }
-
-    /**
-     * @throws ValidationException
-     */
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(
-            response()->json([
-                'status' => 'Validation Error',
-                'message' => $validator->getMessageBag()->toArray(),
-            ], JsonResponse::HTTP_BAD_REQUEST)
-        );
     }
 }

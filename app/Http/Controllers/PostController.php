@@ -5,18 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\SearchPostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Http\Traits\UploadTrait;
-use App\Models\Post;
+use App\Http\Services\PostService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
-    use UploadTrait;
-    private $postModel;
-    public function __construct(Post $post)
+    private $postService;
+    public function __construct(PostService $postService)
     {
-        $this->postModel = $post;
+        $this->postService = $postService;
     }
     /**
      * Display a listing of the resource.
@@ -24,22 +22,11 @@ class PostController extends Controller
      * @param SearchPostRequest $request
      * @return JsonResponse
      */
+
     public function search(SearchPostRequest $request): JsonResponse
     {
-        $select = $request->input('select', ['*']);
-        $per_page = $request->input('per_page', 10);
-        $page = $request->input('page', 1);
-
-        $data = $this->postModel::simplePaginate($per_page, $select, 'page', $page);
-
-        return response()->json([
-            'status' => 'Success',
-            'status_code' => Response::HTTP_CREATED,
-            'message' => '',
-            'data' => $data
-        ], Response::HTTP_CREATED);
+        return $this->postService->search($request);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -49,23 +36,7 @@ class PostController extends Controller
 
     public function create(CreatePostRequest $request): JsonResponse
     {
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = $image->hashName();
-            $this->uploadFile($image, 'posts/images/', $imageName);
-        }
-        $this->postModel::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => $imageName
-        ]);
-        return response()->json([
-            'status' => 'Success',
-            'status_code' => Response::HTTP_CREATED,
-            'message' => 'Post Created Successfully',
-            'data' => []
-        ], Response::HTTP_CREATED);
+        return $this->postService->create($request);
     }
     /**
      * Display the specified resource in storage.
@@ -73,22 +44,10 @@ class PostController extends Controller
      * @param $id
      * @return JsonResponse
      */
+
     public function read($id): JsonResponse
     {
-        $post = $this->postModel::findOrFail($id);
-        if (!$post) {
-            return response()->json([
-                'status' => 'Error',
-                'status_code' => Response::HTTP_NOT_FOUND,
-                'message' => 'Post not found', 'data' => []
-            ], Response::HTTP_NOT_FOUND);
-        }
-        return response()->json([
-            'status' => 'Success',
-            'status_code' => Response::HTTP_OK,
-            'message' => '',
-            'data' => $post->only(['id', 'title', 'description'])
-        ], Response::HTTP_OK);
+        return $this->postService->read($id);
     }
     /**
      * Update the specified resource in storage.
@@ -100,44 +59,17 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, $id): JsonResponse
     {
-        $post = $this->postModel::findOrFail($id);
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = $image->hashName();
-            $this->uploadFile($image, 'posts/images/', $imageName, 'posts/images/' . $post->image);
-        }
-        $post->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image' => (isset($imageName)) ? $imageName : $post->image
-        ]);
-        return response()->json([
-            'status' => 'Success',
-            'status_code' => Response::HTTP_OK,
-            'message' => 'Post Updated Successfully',
-            'data' => []
-        ], Response::HTTP_OK);
+        return $this->postService->update($request, $id);
     }
-
     /**
      * Remove the specified resource from storage.
      *
      * @param $id
      * @return JsonResponse
      */
+    
     public function delete($id): JsonResponse
     {
-        $post = $this->postModel::findOrFail($id);
-        $post->delete();
-        if ($post->image) {
-            $this->deleteFile('posts/images/' .$post->image);
-            return response()->json([
-                'status' => 'Success',
-                'status_code' => Response::HTTP_OK,
-                'message' => 'Post Deleted Successfully',
-                'data' => []
-            ], Response::HTTP_OK);
-        }
+        return $this->postService->delete($id);
     }
 }
