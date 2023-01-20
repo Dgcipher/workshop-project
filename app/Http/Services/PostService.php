@@ -29,7 +29,7 @@ class PostService
 
         $data = $this->postRepository->search($per_page, $select, $page);
 
-        return $this->success('Success', Response::HTTP_CREATED, "", $data);
+        return $this->apiResponse('Success', Response::HTTP_CREATED, "", $data);
     }
 
     public function create($request): JsonResponse
@@ -46,16 +46,16 @@ class PostService
             'image' => $imageName
         ];
         $this->postRepository->create($data);
-        return $this->success('Success', Response::HTTP_CREATED, 'Post Created Successfully', []);
+        return $this->apiResponse('Success', Response::HTTP_CREATED, 'Post Created Successfully', []);
      }
 
     public function read($id): JsonResponse
     {
         $post = $this->postRepository->read($id);
         if (!$post) {
-            return $this->error('Error', Response::HTTP_NOT_FOUND, 'Post not found', []);
+            return $this->apiResponse('Error', Response::HTTP_NOT_FOUND, 'Post not found', []);
         }
-        return $this->success('Success', Response::HTTP_OK, '', $post->only(['id', 'title', 'description']));
+        return $this->apiResponse('Success', Response::HTTP_OK, '', $post->only(['id', 'title', 'description']));
     }
 
     public function update($request, $id): JsonResponse
@@ -72,7 +72,7 @@ class PostService
             'image' => (isset($imageName)) ? $imageName : $post->image
         ];
         $this->postRepository->update($data, $id);
-        return $this->success('Success', Response::HTTP_OK, 'Post Updated Successfully', []);
+        return $this->apiResponse('Success', Response::HTTP_OK, 'Post Updated Successfully', []);
     }
 
     public function delete($id): JsonResponse
@@ -81,7 +81,7 @@ class PostService
         $post->delete();
         if ($post->image) {
             $this->deleteFile('posts/images/' . $post->image);
-            return $this->success('Success', Response::HTTP_OK, 'Post Deleted Successfully', []);
+            return $this->apiResponse('Success', Response::HTTP_OK, 'Post Deleted Successfully', []);
         }
     }
  }
